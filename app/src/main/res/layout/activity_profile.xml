@@ -35,7 +35,7 @@
             android:id="@+id/emailTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Email: "
+            android:text="@string/email"
             android:textSize="18sp"
             android:layout_marginTop="24dp" />
 
@@ -43,7 +43,7 @@
             android:id="@+id/passwordTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Jelszó: "
+            android:text="@string/jelsz"
             android:textSize="18sp"
             android:layout_marginTop="12dp" />
 
@@ -51,7 +51,7 @@
             android:id="@+id/btnBackToMain"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Vissza a főoldalra"
+            android:text="@string/vissza_a_f_oldalra"
             android:backgroundTint="@color/darkblue"
             android:layout_marginTop="24dp"/>
     </LinearLayout>
