@@ -25,6 +25,22 @@ public class LoginActivity extends AppCompatActivity {
     private TextView signupRedirectText;
     private Button loginButton;
 
+    private void pulseAnimation(View view) {
+        view.animate()
+                .scaleX(1.1f)
+                .scaleY(1.1f)
+                .setDuration(100)
+                .withEndAction(new Runnable() {
+                    @Override
+                    public void run() {
+                        view.animate()
+                                .scaleX(1f)
+                                .scaleY(1f)
+                                .setDuration(100);
+                    }
+                }).start();
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -39,6 +55,9 @@ public class LoginActivity extends AppCompatActivity {
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                pulseAnimation(v);
+
                 String email = loginEmail.getText().toString();
                 String pass = loginPassword.getText().toString();
 
@@ -48,7 +67,6 @@ public class LoginActivity extends AppCompatActivity {
                                 .addOnSuccessListener(new OnSuccessListener<AuthResult>() {
                                     @Override
                                     public void onSuccess(AuthResult authResult) {
-                                        // Mentjük el az emailt és a jelszót SharedPreferences-ben
                                         SharedPreferences sharedPreferences = getSharedPreferences("UserDetails", MODE_PRIVATE);
                                         SharedPreferences.Editor editor = sharedPreferences.edit();
                                         editor.putString("email", email);
@@ -57,10 +75,9 @@ public class LoginActivity extends AppCompatActivity {
 
                                         Toast.makeText(LoginActivity.this, "Sikeres Bejelentkezés!", Toast.LENGTH_SHORT).show();
 
-                                        // Tovább navigálunk a MainActivity-be
                                         Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                                         startActivity(intent);
-                                        finish(); // bezárja az aktuális activity-t
+                                        finish();
                                     }
                                 }).addOnFailureListener(new OnFailureListener() {
                                     @Override

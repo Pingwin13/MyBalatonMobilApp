@@ -13,7 +13,6 @@ import androidx.appcompat.widget.Toolbar;
 
 public class MainActivity extends AppCompatActivity {
 
-    // Felhasználói adatok (email, jelszó), amelyeket a SharedPreferences-ből kell átadni
     private String email, password;
 
     @Override
@@ -24,12 +23,10 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        // Az adatokat át kell venni a SharedPreferences-ből
         SharedPreferences sharedPreferences = getSharedPreferences("UserDetails", MODE_PRIVATE);
         email = sharedPreferences.getString("email", null);
         password = sharedPreferences.getString("password", null);
 
-        // Ha nincs email vagy jelszó, akkor logolj ki
         if (email == null || password == null) {
             Toast.makeText(this, "Nincs bejelentkezve!", Toast.LENGTH_SHORT).show();
             Intent intent = new Intent(MainActivity.this, LoginActivity.class);
@@ -49,7 +46,6 @@ public class MainActivity extends AppCompatActivity {
         int id = item.getItemId();
 
         if (id == R.id.profile) {
-            // Az email és jelszó átadása a Profile activity-be
             Intent intent = new Intent(MainActivity.this, Profile.class);
             intent.putExtra("email", email);  // Email átadása
             intent.putExtra("password", password);  // Jelszó átadása

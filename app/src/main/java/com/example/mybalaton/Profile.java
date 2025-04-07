@@ -27,7 +27,6 @@ public class Profile extends AppCompatActivity {
         emailTextView = findViewById(R.id.emailTextView);
         passwordTextView = findViewById(R.id.passwordTextView);
 
-        // Az email és jelszó átvétele az Intent-ből
         String email = getIntent().getStringExtra("email");
         String password = getIntent().getStringExtra("password");
 

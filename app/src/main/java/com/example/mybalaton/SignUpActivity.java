@@ -27,6 +27,21 @@ public class SignUpActivity extends AppCompatActivity {
     private Button signupButton;
     private TextView loginRedirectText;
 
+    private void pulseAnimation(View view) {
+        view.animate()
+                .scaleX(1.1f)
+                .scaleY(1.1f)
+                .setDuration(100)
+                .withEndAction(new Runnable() {
+                    @Override
+                    public void run() {
+                        view.animate()
+                                .scaleX(1f)
+                                .scaleY(1f)
+                                .setDuration(100);
+                    }
+                }).start();
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,6 +58,9 @@ public class SignUpActivity extends AppCompatActivity {
         signupButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                pulseAnimation(v);
+
                 String user = signupEmail.getText().toString().trim();
                 String pass = signupPassword.getText().toString().trim();
                 String passAgain = signupPasswordAgain.getText().toString().trim();
