@@ -43,6 +43,7 @@ public class SignUpActivity extends AppCompatActivity {
                 }).start();
     }
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -67,15 +68,19 @@ public class SignUpActivity extends AppCompatActivity {
 
                 if(user.isEmpty()){
                     signupEmail.setError("Email cím megadása kötelező!");
+                    return;
                 }
                 if(pass.isEmpty()){
                     signupPassword.setError("Jelszó megadása kötelező!");
+                    return;
                 }
                 if(passAgain.isEmpty()){
                     signupPasswordAgain.setError("Ellenörző jelszó megadása kötelező");
+                    return;
                 }
                 if(!pass.equals(passAgain)){
                     signupPasswordAgain.setError("Nem egyezik a két jelszó!");
+                    return;
                 }
                 else{
                     auth.createUserWithEmailAndPassword(user,pass).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
