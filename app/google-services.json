@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "511406513434",
+    "project_id": "mybalaton-abe24",
+    "storage_bucket": "mybalaton-abe24.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:511406513434:android:7cd2149eaba7ade77660a3",
+        "android_client_info": {
+          "package_name": "com.example.mybalaton"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDqra99_uZ26WeWgRHtAqS45HRYyW4lWuo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

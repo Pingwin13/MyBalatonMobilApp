@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:title="Látnivaló Keresése"
+        android:id="@+id/search"
+        android:icon="@drawable/baseline_content_paste_search_24"
+        app:actionViewClass="androidx.appcompat.widget.SearchView"
+        app:showAsAction="ifRoom|collapseActionView"/>
+
+    <item
+        android:title="Új látnivaló hozzáadása"
+        android:id="@+id/add"
+        android:icon="@drawable/baseline_add_circle_outline_24"
+        app:showAsAction="ifRoom"/>
+
+    <item
+        android:title="Profil"
+        android:id="@+id/profile"
+        android:icon="@drawable/baseline_account_circle_24"
+        app:showAsAction="ifRoom"/>
+
+    <item
+        android:title="Kilépés"
+        android:id="@+id/exit"/>
+
+
+</menu>
