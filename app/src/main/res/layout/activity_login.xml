@@ -8,21 +8,32 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:gravity="center"
-    android:background="@drawable/balatonbg1"
+    android:background="@color/lightblue"
     tools:context=".LoginActivity">
 
+    <ImageView
+        android:id="@+id/imageView2"
+        android:layout_width="350dp"
+        android:layout_height="150dp"
+        android:layout_above="@+id/blurView"
+        android:layout_marginLeft="40dp"
+        android:layout_marginRight="40dp"
+        app:srcCompat="@drawable/balatonicon" />
+
     <eightbitlab.com.blurview.BlurView
+        android:id="@+id/blurView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
         android:layout_margin="20dp"
-        android:id="@+id/blurView"
+        android:layout_marginBottom="392dp"
         app:cardCornerRadius="30dp"
         app:cardElevation="20dp">
 
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_gravity="center_horizontal"
             android:background="@drawable/custom_edittext"
             android:orientation="vertical"
@@ -34,13 +45,12 @@
                 android:layout_height="wrap_content"
                 android:text="@string/login"
                 android:textAlignment="center"
-                android:textColor="@color/white"
+                android:textColor="@color/darkblue"
                 android:textSize="36sp"
                 android:textStyle="bold" />
 
             <EditText
                 android:id="@+id/login_email"
-                android:inputType="textEmailAddress"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:layout_marginTop="10dp"
@@ -48,12 +58,12 @@
                 android:drawableLeft="@drawable/baseline_account_circle_24"
                 android:drawablePadding="8dp"
                 android:hint="@string/email"
+                android:inputType="textEmailAddress"
                 android:padding="8dp"
                 android:textColor="@color/white" />
 
             <EditText
                 android:id="@+id/login_password"
-                android:inputType="textPassword"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:layout_marginTop="10dp"
@@ -61,6 +71,7 @@
                 android:drawableLeft="@drawable/baseline_lock_24"
                 android:drawablePadding="8dp"
                 android:hint="@string/password"
+                android:inputType="textPassword"
                 android:padding="8dp"
                 android:textColor="@color/white" />
 
@@ -70,8 +81,8 @@
                 android:layout_height="50dp"
                 android:layout_marginTop="10dp"
                 android:backgroundTint="@color/darkblue"
-                android:textColor="@color/white"
                 android:text="@string/login"
+                android:textColor="@color/white"
                 android:textSize="14sp"
                 app:cornerRadius="20dp" />
 
@@ -90,5 +101,8 @@
         </LinearLayout>
 
     </eightbitlab.com.blurview.BlurView>
+
+
+
 
 </RelativeLayout>
