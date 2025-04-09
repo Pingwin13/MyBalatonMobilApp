@@ -8,23 +8,24 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:gravity="center"
-    android:background="@color/lightblue"
+    android:background="@drawable/balatonbackg"
     tools:context=".SignUpActivity">
 
-    <eightbitlab.com.blurview.BlurView
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cardViewContainer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="20dp"
-        app:cardCornerRadius="30dp"
-        app:cardElevation="20dp">
-
+        app:cardCornerRadius="16dp"
+        app:cardElevation="8dp"
+        app:cardBackgroundColor="#80FFFFFF">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:layout_gravity="center_horizontal"
-            android:padding="10dp"
+            android:padding="16dp"
             android:background="@drawable/custom_edittext">
 
             <TextView
@@ -40,13 +41,13 @@
                 android:id="@+id/signup_email"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="16dp"
                 android:inputType="textEmailAddress"
                 android:background="@drawable/custom_edittext"
                 android:drawableLeft="@drawable/baseline_account_circle_24"
                 android:drawablePadding="8dp"
                 android:hint="@string/email"
-                android:padding="3dp"
+                android:padding="8dp"
                 android:textColor="@color/white" />
 
             <EditText
@@ -55,7 +56,7 @@
                 android:id="@+id/signup_password"
                 android:inputType="textPassword"
                 android:background="@drawable/custom_edittext"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="16dp"
                 android:padding="8dp"
                 android:hint="@string/password"
                 android:drawableLeft="@drawable/baseline_lock_24"
@@ -68,7 +69,7 @@
                 android:id="@+id/signup_passwordagain"
                 android:inputType="textPassword"
                 android:background="@drawable/custom_edittext"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="16dp"
                 android:padding="8dp"
                 android:hint="@string/password_again"
                 android:drawableLeft="@drawable/baseline_lock_24"
@@ -80,11 +81,11 @@
                 android:layout_height="50dp"
                 android:text="@string/sign_up"
                 android:id="@+id/signup_button"
-                android:textSize="14sp"
-                android:layout_marginTop="10dp"
+                android:textSize="16sp"
+                android:layout_marginTop="24dp"
                 android:backgroundTint="@color/darkblue"
                 android:textColor="@color/white"
-                app:cornerRadius= "20dp"/>
+                app:cornerRadius="16dp"/>
 
             <TextView
                 android:layout_width="wrap_content"
@@ -93,15 +94,10 @@
                 android:text="@string/already_an_user_login"
                 android:layout_gravity="center"
                 android:padding="8dp"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="16dp"
                 android:textColor="@color/white"
-                android:textSize="14sp"/>
-
-
-
-
+                android:textSize="16sp"/>
         </LinearLayout>
-
-    </eightbitlab.com.blurview.BlurView>
+    </androidx.cardview.widget.CardView>
 
 </LinearLayout>

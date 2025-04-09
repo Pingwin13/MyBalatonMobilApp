@@ -7,7 +7,7 @@
     <string name="already_an_user_login">Already an user? Login</string>
     <string name="jelsz">Jelszó:</string>
     <string name="vissza_a_f_oldalra">Vissza a főoldalra</string>
-    <string name="welcome_to_mybalaton_app">Welcome to MyBalaton app!</string>
+    <string name="welcome_to_mybalaton_app">Üdvözöllek a MyBalatonon!</string>
     <string name="login">Login</string>
     <string name="not_yet_registered_sign_up">Not yet registered? Sign Up</string>
 </resources>

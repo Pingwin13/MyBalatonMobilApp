@@ -3,6 +3,11 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
+        android:title="Látnivalók"
+        android:id="@+id/attractions"
+        app:showAsAction="never"/>
+
+    <item
         android:title="Látnivaló Keresése"
         android:id="@+id/search"
         android:icon="@drawable/baseline_content_paste_search_24"
@@ -18,12 +23,11 @@
     <item
         android:title="Profil"
         android:id="@+id/profile"
-        android:icon="@drawable/baseline_account_circle_24"
+        android:icon="@drawable/account_circle_24"
         app:showAsAction="ifRoom"/>
 
     <item
         android:title="Kilépés"
         android:id="@+id/exit"/>
-
 
 </menu>

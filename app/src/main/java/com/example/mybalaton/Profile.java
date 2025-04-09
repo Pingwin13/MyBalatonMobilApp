@@ -1,6 +1,7 @@
 package com.example.mybalaton;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -30,6 +31,12 @@ public class Profile extends AppCompatActivity {
         String email = getIntent().getStringExtra("email");
         String password = getIntent().getStringExtra("password");
 
+        if (email == null || password == null) {
+            SharedPreferences sharedPreferences = getSharedPreferences("UserDetails", MODE_PRIVATE);
+            email = sharedPreferences.getString("email", "Nincs bejelentkezve");
+            password = sharedPreferences.getString("password", "Nincs bejelentkezve");
+        }
+
         emailTextView.setText("Email: " + email);
         passwordTextView.setText("Jelszó: " + password);
 
@@ -51,19 +58,42 @@ public class Profile extends AppCompatActivity {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         int id = item.getItemId();
 
+        if (id == R.id.attractions) {
+            Intent intent = new Intent(Profile.this, AttractionsActivity.class);
+            startActivity(intent);
+            return true;
+        }
+        
         if (id == R.id.profile) {
-            Toast.makeText(this, "Profil", Toast.LENGTH_SHORT).show();
-        } else if (id == R.id.search) {
+            Toast.makeText(this, "Már a profil oldalon vagy", Toast.LENGTH_SHORT).show();
+            return true;
+        } 
+        
+        if (id == R.id.search) {
             Toast.makeText(this, "Keresés", Toast.LENGTH_SHORT).show();
-        } else if (id == R.id.add) {
-            Toast.makeText(this, "Hozzáadás", Toast.LENGTH_SHORT).show();
-        } else if (id == R.id.exit) {
+            return true;
+        } 
+        
+        if (id == R.id.add) {
+            Intent intent = new Intent(Profile.this, AddAttractionActivity.class);
+            startActivity(intent);
+            return true;
+        } 
+        
+        if (id == R.id.exit) {
+            SharedPreferences sharedPreferences = getSharedPreferences("UserDetails", MODE_PRIVATE);
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            editor.clear();
+            editor.apply();
+
             Toast.makeText(this, "Kilépés", Toast.LENGTH_SHORT).show();
             Intent intent = new Intent(this, LoginActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
             startActivity(intent);
             finish();
+            return true;
         }
 
-        return true;
+        return super.onOptionsItemSelected(item);
     }
 }
