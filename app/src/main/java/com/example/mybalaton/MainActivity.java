@@ -48,7 +48,6 @@ public class MainActivity extends AppCompatActivity {
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                // Create slide up animation with fade in
                 welcomeText.animate()
                     .translationY(0f)
                     .alpha(1f)
