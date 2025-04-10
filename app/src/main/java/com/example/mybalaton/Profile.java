@@ -57,6 +57,12 @@ public class Profile extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         int id = item.getItemId();
+        
+        if (id == R.id.main) {
+            Intent intent = new Intent(Profile.this, MainActivity.class);
+            startActivity(intent);
+            return true;
+        }
 
         if (id == R.id.attractions) {
             Intent intent = new Intent(Profile.this, AttractionsActivity.class);

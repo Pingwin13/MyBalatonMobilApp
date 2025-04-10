@@ -2,6 +2,11 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
+    <item android:title="Home"
+        android:id="@+id/main"
+        android:icon="@drawable/home_24"
+        app:showAsAction="ifRoom"
+        />
     <item
         android:title="Látnivalók"
         android:id="@+id/attractions"
@@ -23,7 +28,7 @@
     <item
         android:title="Profil"
         android:id="@+id/profile"
-        android:icon="@drawable/account_circle_24"
+        android:icon="@drawable/baseline_account_circle_24"
         app:showAsAction="ifRoom"/>
 
     <item

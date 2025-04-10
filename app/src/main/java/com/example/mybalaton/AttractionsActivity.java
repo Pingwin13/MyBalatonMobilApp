@@ -3,7 +3,6 @@ package com.example.mybalaton;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -18,12 +17,6 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -34,7 +27,6 @@ public class AttractionsActivity extends AppCompatActivity {
     private AttractionAdapter adapter;
     private List<AttractionModel> attractionList;
     private List<AttractionModel> filteredList;
-    private DatabaseReference databaseReference;
     private ProgressBar progressBar;
     private TextView emptyView;
 
@@ -54,86 +46,17 @@ public class AttractionsActivity extends AppCompatActivity {
         attractionList = new ArrayList<>();
         filteredList = new ArrayList<>();
 
+        attractionList.add(new AttractionModel("Balaton", "A legszebb tó Magyarországon", R.drawable.balatonbackg));
+        
+        filteredList.addAll(attractionList);
+        
         adapter = new AttractionAdapter(this, filteredList);
         recyclerView.setAdapter(adapter);
 
-        try {
-            FirebaseDatabase database = FirebaseDatabase.getInstance();
-            databaseReference = database.getReference("attractions");
-            Log.d(TAG, "Firebase database reference initialized successfully");
-
-            if (emptyView != null) {
-                emptyView.setVisibility(View.GONE);
-            }
-            
-            loadAttractionsFromFirebase();
-        } catch (Exception e) {
-            Log.e(TAG, "Error initializing Firebase: " + e.getMessage());
-            Toast.makeText(this, "Hiba az adatbázishoz való csatlakozás során: " + e.getMessage(), Toast.LENGTH_LONG).show();
+        if (emptyView != null) {
+            emptyView.setVisibility(View.GONE);
         }
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        if (databaseReference != null) {
-            loadAttractionsFromFirebase();
-        }
-    }
-
-    private void loadAttractionsFromFirebase() {
-        showProgressBar();
         
-        databaseReference.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                attractionList.clear();
-                
-                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                    AttractionModel attraction = snapshot.getValue(AttractionModel.class);
-                    if (attraction != null) {
-                        attractionList.add(attraction);
-                    }
-                }
-                
-                if (attractionList.isEmpty()) {
-                    Log.d(TAG, "No attractions found in Firebase");
-                    if (emptyView != null) {
-                        emptyView.setVisibility(View.VISIBLE);
-                        emptyView.setText("Nincsenek látnivalók. Használd a + gombot új hozzáadásához!");
-                    }
-                } else {
-                    Log.d(TAG, "Loaded " + attractionList.size() + " attractions from Firebase");
-                    if (emptyView != null) {
-                        emptyView.setVisibility(View.GONE);
-                    }
-                }
-
-                filteredList.clear();
-                filteredList.addAll(attractionList);
-                adapter.notifyDataSetChanged();
-                
-                hideProgressBar();
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-                Log.e(TAG, "Error loading attractions: " + databaseError.getMessage());
-                Toast.makeText(AttractionsActivity.this, 
-                        "Hiba az adatok betöltése során: " + databaseError.getMessage(), 
-                        Toast.LENGTH_LONG).show();
-                hideProgressBar();
-            }
-        });
-    }
-    
-    private void showProgressBar() {
-        if (progressBar != null) {
-            progressBar.setVisibility(View.VISIBLE);
-        }
-    }
-    
-    private void hideProgressBar() {
         if (progressBar != null) {
             progressBar.setVisibility(View.GONE);
         }
@@ -203,6 +126,11 @@ public class AttractionsActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         int id = item.getItemId();
+        
+        if (id == R.id.main) {
+            startActivity(new Intent(this, MainActivity.class));
+            return true;
+        }
         
         if (id == R.id.attractions) {
             Toast.makeText(this, "Már a Látnivalók oldalon vagy", Toast.LENGTH_SHORT).show();

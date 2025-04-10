@@ -6,6 +6,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Log;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -17,11 +18,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.textfield.TextInputEditText;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 
 import java.io.IOException;
 
@@ -36,7 +33,6 @@ public class AddAttractionActivity extends AppCompatActivity {
     private Button saveButton;
     
     private Uri imageUri;
-    private DatabaseReference databaseReference;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,17 +47,6 @@ public class AddAttractionActivity extends AppCompatActivity {
             getSupportActionBar().setDisplayShowHomeEnabled(true);
         }
 
-        try {
-            FirebaseDatabase database = FirebaseDatabase.getInstance();
-            databaseReference = database.getReference("attractions");
-            Log.d(TAG, "Firebase database reference initialized successfully");
-        } catch (Exception e) {
-            Log.e(TAG, "Error initializing Firebase: " + e.getMessage());
-            Toast.makeText(this, "Hiba az adatbázishoz való csatlakozás során: " + e.getMessage(), Toast.LENGTH_LONG).show();
-            finish();
-            return;
-        }
-
         attractionImagePreview = findViewById(R.id.attractionImagePreview);
         selectImageButton = findViewById(R.id.selectImageButton);
         nameEditText = findViewById(R.id.nameEditText);
@@ -71,6 +56,21 @@ public class AddAttractionActivity extends AppCompatActivity {
         selectImageButton.setOnClickListener(view -> openFileChooser());
 
         saveButton.setOnClickListener(view -> saveAttraction());
+    }
+    
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.toolbar_menu, menu);
+        
+        // Hide all menu items except main/home
+        for (int i = 0; i < menu.size(); i++) {
+            MenuItem item = menu.getItem(i);
+            if (item.getItemId() != R.id.main) {
+                item.setVisible(false);
+            }
+        }
+        
+        return true;
     }
     
     private void openFileChooser() {
@@ -100,17 +100,11 @@ public class AddAttractionActivity extends AppCompatActivity {
     }
     
     private void saveAttraction() {
-        if (databaseReference == null) {
-            Toast.makeText(this, "Adatbázis hiba: nem sikerült csatlakozni a Firebase-hez", Toast.LENGTH_LONG).show();
-            return;
-        }
-        
-        saveButton.setEnabled(false); // Prevent multiple clicks
-        
         String name = nameEditText.getText().toString().trim();
         String description = descriptionEditText.getText().toString().trim();
+
+        saveButton.setEnabled(false);
         
-        // Validate inputs
         if (name.isEmpty()) {
             nameEditText.setError("Kérlek add meg a látnivaló nevét!");
             nameEditText.requestFocus();
@@ -124,45 +118,30 @@ public class AddAttractionActivity extends AppCompatActivity {
             saveButton.setEnabled(true);
             return;
         }
-        
-        // Create attraction with default image (for now)
-        AttractionModel attraction = new AttractionModel(name, description, R.drawable.balatonbackg);
-        
-        // Generate unique key for the attraction
-        String attractionId = databaseReference.push().getKey();
-        
-        if (attractionId == null) {
-            Toast.makeText(this, "Hiba a látnivaló azonosító generálása során", Toast.LENGTH_SHORT).show();
-            saveButton.setEnabled(true);
-            return;
-        }
-        
-        // Save attraction to Firebase
-        databaseReference.child(attractionId).setValue(attraction)
-            .addOnSuccessListener(aVoid -> {
-                Log.d(TAG, "Attraction saved successfully with ID: " + attractionId);
-                Toast.makeText(AddAttractionActivity.this, "Látnivaló sikeresen hozzáadva!", Toast.LENGTH_SHORT).show();
-                
-                // Go back to attractions list
-                Intent intent = new Intent(AddAttractionActivity.this, AttractionsActivity.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                startActivity(intent);
-                finish();
-            })
-            .addOnFailureListener(e -> {
-                Log.e(TAG, "Error saving attraction: " + e.getMessage());
-                Toast.makeText(AddAttractionActivity.this, "Hiba a mentés során: " + e.getMessage(), Toast.LENGTH_LONG).show();
-                saveButton.setEnabled(true);
-            });
+
+        Toast.makeText(AddAttractionActivity.this, "Látnivaló létrehozva", Toast.LENGTH_SHORT).show();
+
+        Intent intent = new Intent(AddAttractionActivity.this, AttractionsActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        startActivity(intent);
+        finish();
     }
-    
+
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        // Handle back button click
-        if (item.getItemId() == android.R.id.home) {
+        int id = item.getItemId();
+
+        if (id == R.id.main) {
+            Intent intent = new Intent(AddAttractionActivity.this, MainActivity.class);
+            startActivity(intent);
+            return true;
+        }
+        
+        if (id == android.R.id.home) {
             onBackPressed();
             return true;
         }
+        
         return super.onOptionsItemSelected(item);
     }
 } 
