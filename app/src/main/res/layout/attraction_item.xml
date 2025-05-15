@@ -37,6 +37,15 @@
                 android:textStyle="bold"/>
 
             <TextView
+                android:id="@+id/attractionDate"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text="Látnivaló dátuma"
+                android:textColor="@android:color/white"
+                android:textSize="14sp"/>
+
+            <TextView
                 android:id="@+id/attractionDescription"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -44,6 +53,34 @@
                 android:text="Látnivaló leírása itt lesz olvasható részletesen"
                 android:textColor="@android:color/white"
                 android:textSize="14sp"/>
+
+            <LinearLayout
+                android:id="@+id/actionButtonsLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="end"
+                android:layout_marginTop="8dp">
+
+                <Button
+                    android:id="@+id/btnEdit"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Szerkesztés"
+                    android:textAllCaps="false"
+                    android:backgroundTint="@color/white"
+                    android:textColor="@color/darkblue"
+                    android:layout_marginEnd="8dp"/>
+
+                <Button
+                    android:id="@+id/btnDelete"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Törlés"
+                    android:textAllCaps="false"
+                    android:backgroundTint="@color/white"
+                    android:textColor="@color/darkblue"/>
+            </LinearLayout>
         </LinearLayout>
     </LinearLayout>
 </androidx.cardview.widget.CardView> 

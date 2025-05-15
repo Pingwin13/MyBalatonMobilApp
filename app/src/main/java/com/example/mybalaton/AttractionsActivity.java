@@ -1,7 +1,10 @@
 package com.example.mybalaton;
 
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -14,15 +17,22 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SearchView;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.app.NotificationCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.DocumentSnapshot;
+
 public class AttractionsActivity extends AppCompatActivity {
 
     private static final String TAG = "AttractionsActivity";
+    private static final String CHANNEL_ID = "attractions_channel";
+    private static final int NOTIFICATION_ID = 1;
+    
     private RecyclerView recyclerView;
     private AttractionAdapter adapter;
     private List<AttractionModel> attractionList;
@@ -35,6 +45,8 @@ public class AttractionsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_attractions);
 
+        createNotificationChannel();
+
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -46,12 +58,7 @@ public class AttractionsActivity extends AppCompatActivity {
         attractionList = new ArrayList<>();
         filteredList = new ArrayList<>();
 
-        attractionList.add(new AttractionModel("Balaton", "A legszebb tó Magyarországon", R.drawable.balatonbackg));
-        
-        filteredList.addAll(attractionList);
-        
-        adapter = new AttractionAdapter(this, filteredList);
-        recyclerView.setAdapter(adapter);
+        loadAttractions();
 
         if (emptyView != null) {
             emptyView.setVisibility(View.GONE);
@@ -60,6 +67,66 @@ public class AttractionsActivity extends AppCompatActivity {
         if (progressBar != null) {
             progressBar.setVisibility(View.GONE);
         }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        loadAttractions();
+    }
+
+    private void createNotificationChannel() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            NotificationChannel channel = new NotificationChannel(
+                CHANNEL_ID,
+                "Látnivalók értesítések",
+                NotificationManager.IMPORTANCE_DEFAULT
+            );
+            channel.setDescription("Értesítések az új látnivalókról");
+            
+            NotificationManager notificationManager = getSystemService(NotificationManager.class);
+            notificationManager.createNotificationChannel(channel);
+        }
+    }
+
+    private void showNotification(String title, String message) {
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(this, CHANNEL_ID)
+            .setSmallIcon(R.drawable.icon)
+            .setContentTitle(title)
+            .setContentText(message)
+            .setPriority(NotificationCompat.PRIORITY_DEFAULT);
+
+        NotificationManager notificationManager = getSystemService(NotificationManager.class);
+        notificationManager.notify(NOTIFICATION_ID, builder.build());
+    }
+
+    private void loadAttractions() {
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        db.collection("attractions")
+          .get()
+          .addOnSuccessListener(queryDocumentSnapshots -> {
+              attractionList.clear();
+              for (DocumentSnapshot doc : queryDocumentSnapshots) {
+                  AttractionModel attraction = doc.toObject(AttractionModel.class);
+                  if (attraction != null) {
+                      attraction.setId(doc.getId()); // Firestore ID mentése
+                      attractionList.add(attraction);
+                  }
+              }
+              filteredList.clear();
+              filteredList.addAll(attractionList);
+              if (adapter == null) {
+                  SharedPreferences preferences = getSharedPreferences("UserDetails", MODE_PRIVATE);
+                  String currentUserEmail = preferences.getString("userEmail", "");
+                  adapter = new AttractionAdapter(AttractionsActivity.this, filteredList, currentUserEmail);
+                  recyclerView.setAdapter(adapter);
+              } else {
+                  adapter.notifyDataSetChanged();
+              }
+          })
+          .addOnFailureListener(e -> {
+              Toast.makeText(AttractionsActivity.this, "Hiba: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+          });
     }
 
     private void filterAttractions(String query) {
@@ -119,6 +186,14 @@ public class AttractionsActivity extends AppCompatActivity {
                 return true;
             }
         });
+
+
+        menu.add(Menu.NONE, R.id.sort_name_asc, Menu.NONE, "Név szerint (A-Z)")
+            .setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
+        menu.add(Menu.NONE, R.id.sort_date_desc, Menu.NONE, "Dátum szerint (újabbak előre)")
+            .setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
+        menu.add(Menu.NONE, R.id.sort_date_asc, Menu.NONE, "Dátum szerint (régebbiek előre)")
+            .setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
         
         return true;
     }
@@ -160,6 +235,21 @@ public class AttractionsActivity extends AppCompatActivity {
             Intent intent = new Intent(this, LoginActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
             startActivity(intent);
+            return true;
+        }
+        
+        if (id == R.id.sort_name_asc) {
+            adapter.sortByName();
+            return true;
+        }
+        
+        if (id == R.id.sort_date_desc) {
+            adapter.sortByDate(false);
+            return true;
+        }
+        
+        if (id == R.id.sort_date_asc) {
+            adapter.sortByDate(true);
             return true;
         }
         
