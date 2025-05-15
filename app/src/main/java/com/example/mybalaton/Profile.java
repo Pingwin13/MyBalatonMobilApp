@@ -109,20 +109,6 @@ public class Profile extends AppCompatActivity {
           });
     }
 
-    private void showAttractionOptionsDialog(AttractionModel attraction, int position) {
-        String[] options = {"Szerkesztés", "Törlés"};
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Látnivaló kezelése");
-        builder.setItems(options, (dialog, which) -> {
-            if (which == 0) {
-                editAttraction(attraction);
-            } else {
-                deleteAttraction(position);
-            }
-        });
-        builder.show();
-    }
-
     private void editAttraction(AttractionModel attraction) {
         Intent intent = new Intent(this, AddAttractionActivity.class);
         intent.putExtra("attraction_name", attraction.getName());

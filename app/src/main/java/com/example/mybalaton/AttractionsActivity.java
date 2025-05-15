@@ -109,7 +109,7 @@ public class AttractionsActivity extends AppCompatActivity {
               for (DocumentSnapshot doc : queryDocumentSnapshots) {
                   AttractionModel attraction = doc.toObject(AttractionModel.class);
                   if (attraction != null) {
-                      attraction.setId(doc.getId()); // Firestore ID mentése
+                      attraction.setId(doc.getId());
                       attractionList.add(attraction);
                   }
               }

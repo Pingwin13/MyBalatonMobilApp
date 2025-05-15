@@ -40,6 +40,9 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import android.content.SharedPreferences;
 import java.util.UUID;
+import android.app.AlarmManager;
+import android.app.PendingIntent;
+import android.content.Context;
 
 public class AddAttractionActivity extends AppCompatActivity {
 
@@ -365,6 +368,7 @@ public class AddAttractionActivity extends AppCompatActivity {
                 .addOnSuccessListener(aVoid -> {
                     Log.d(TAG, "Sikeres frissítés: " + editAttractionId);
                     Toast.makeText(AddAttractionActivity.this, "Látnivaló frissítve!", Toast.LENGTH_SHORT).show();
+                    scheduleNotification(name);
                     Intent intent = new Intent(AddAttractionActivity.this, AttractionsActivity.class);
                     intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
                     startActivity(intent);
@@ -381,6 +385,7 @@ public class AddAttractionActivity extends AppCompatActivity {
                 .addOnSuccessListener(documentReference -> {
                     Log.d(TAG, "Sikeres mentés: " + documentReference.getId());
                     Toast.makeText(AddAttractionActivity.this, "Látnivaló mentve!", Toast.LENGTH_SHORT).show();
+                    scheduleNotification(name);
                     Intent intent = new Intent(AddAttractionActivity.this, AttractionsActivity.class);
                     intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
                     startActivity(intent);
@@ -392,6 +397,19 @@ public class AddAttractionActivity extends AppCompatActivity {
                     saveButton.setEnabled(true);
                 });
         }
+    }
+
+    private void scheduleNotification(String attractionName) {
+        Intent intent = new Intent(this, NotificationReceiver.class);
+        intent.putExtra("attraction_name", attractionName);
+
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(
+                this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
+
+        AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+        long triggerAtMillis = System.currentTimeMillis() + 60 * 1000;
+
+        alarmManager.set(AlarmManager.RTC_WAKEUP, triggerAtMillis, pendingIntent);
     }
 
     @Override
